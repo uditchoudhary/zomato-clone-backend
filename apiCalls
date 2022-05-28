@@ -1,0 +1,85 @@
+# assignment-6-uditchoudhary
+
+
+## Problem Statement 1
+### Create API for Restaurant search page with filters, sort and pagination as input parameters
+Request URL:
+>> POST: http://localhost:9700/filterRestaurants
+>> body:
+
+-> only meals type
+
+{
+   "mealtype": "2"
+}
+
+-> Meal type and cuisine
+
+{
+   "mealtype": "2",
+   "cuisine": ["Chinese"]
+}
+
+-> meal type and cost
+
+{
+   "mealtype": "2",
+   "hcost": 1020,
+   "lcost": 600
+}
+
+-> meal type, cuisine and cost
+
+{
+   "mealtype": "2",
+   "hcost": 1020,
+   "lcost": 600,
+   "cuisine": ["Chinese"]
+}
+
+-> meal type and location
+
+{
+   "mealtype": "2",
+    "location": 12
+}
+
+-> meal type, cuisine and location
+
+{
+   "mealtype": "2",
+    "location": 12,
+    "cuisine": ["Chinese"]
+}
+
+-> meal type, location and cost
+
+{
+   "mealtype": "2",
+    "location": 12,
+   "hcost": 1020,
+   "lcost": 600
+}
+
+-> meal type, location, cost and cuisine
+
+{
+   "mealtype": "2",
+    "location": 12,
+   "hcost": 1020,
+   "lcost": 600,
+   "cuisine": ["Chinese"]
+}
+
+-> pagination, add following to any of the above body ( Page size is set to 5 )
+
+{
+    "page": "2"
+}
+
+
+## Problem Statement 2
+### Create API for Restaurant Product Details page
+
+Request url:
+>> GET: http://localhost:9700/restaurant/3
