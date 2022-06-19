@@ -50,8 +50,8 @@ app.get("/mealType", (req, res) => {
 app.get("/restaurants/", (req, res) => {
   let query = {};
   let stateId = Number(req.query.state_id);
-  let mealId = Number(req.query.meal_id);
-  console.log(stateId);
+  let mealId = Number(req.query.mealtype_id);
+  console.log("Received value",mealId);
   if (stateId) {
     query = { state_id: stateId };
   } else if (mealId) {
@@ -62,7 +62,6 @@ app.get("/restaurants/", (req, res) => {
     .find(query)
     .toArray((err, result) => {
       if (err) throw err;
-      console.log(result);
       res.send(result);
     });
 });
