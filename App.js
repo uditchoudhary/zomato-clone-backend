@@ -51,7 +51,7 @@ app.get("/restaurants/", (req, res) => {
   let query = {};
   let stateId = Number(req.query.state_id);
   let mealId = Number(req.query.mealtype_id);
-  console.log("Received value",mealId);
+  console.log("Received value", mealId);
   if (stateId) {
     query = { state_id: stateId };
   } else if (mealId) {
@@ -60,6 +60,42 @@ app.get("/restaurants/", (req, res) => {
   console.log("query", query);
   db.collection("restaurants")
     .find(query)
+    .toArray((err, result) => {
+      if (err) throw err;
+      res.send(result);
+    });
+});
+
+app.get("/filters/:mealtype_id", (req, res) => {
+  let sort = { cost: 1 };
+  let mealId = Number(req.params.mealtype_id);
+  let cuisineId = Number(req.query.cuisineId);
+  let lcost = Number(req.query.lcost);
+  let hcost = Number(req.query.hcost);
+
+  let query = {};
+  if (req.query.sort) {
+    sort = { cost: Number(req.query.sort) };
+  }
+  if (cuisineId) {
+    query = {
+      "mealTypes.mealtype_id": mealId,
+      "cuisines.cuisine_id": cuisineId,
+    };
+  } else if (lcost && hcost) {
+    query = {
+      "mealTypes.mealtype_id": mealId,
+      $and: [{ cost: { $gt: lcost, $lt: hcost } }],
+    };
+  } else {
+    query = {
+      "mealTypes.mealtype_id": mealId,
+    };
+  }
+  console.log(query);
+  db.collection("restaurants")
+    .find(query)
+    .sort(sort)
     .toArray((err, result) => {
       if (err) throw err;
       res.send(result);
