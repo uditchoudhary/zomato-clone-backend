@@ -51,18 +51,18 @@ app.get("/restaurants/", (req, res) => {
   let query = {};
   let stateId = Number(req.query.state_id);
   let mealId = Number(req.query.meal_id);
-  console.log(stateId)
+  console.log(stateId);
   if (stateId) {
     query = { state_id: stateId };
   } else if (mealId) {
     query = { "mealTypes.mealtype_id": mealId };
   }
-  console.log("query", query)
+  console.log("query", query);
   db.collection("restaurants")
     .find(query)
     .toArray((err, result) => {
       if (err) throw err;
-      console.log(result)
+      console.log(result);
       res.send(result);
     });
 });
@@ -73,11 +73,35 @@ app.get("/restaurant/:restId", (req, res) => {
     .find({ restaurant_id: restId })
     .toArray((err, result) => {
       if (err) throw err;
-      console.log(result)
+      console.log(result);
       res.send(result);
     });
 });
 
+app.get("/menu/:restId", (req, res) => {
+  const restId = Number(req.params.restId);
+  db.collection("restaurantsMenu")
+    .find({ restaurant_id: restId })
+    .toArray((err, result) => {
+      if (err) throw err;
+      console.log(result);
+      res.send(result);
+    });
+});
+// menu on basis of id
+app.post("/menuItem", (req, res) => {
+  console.log(req.body);
+  if (Array.isArray(req.body)) {
+    db.collection("restaurantsMenu")
+      .find({ menu_id: { $in: req.body } })
+      .toArray((err, result) => {
+        if (err) throw err;
+        res.send(result);
+      });
+  } else {
+    res.send("Invalid Input");
+  }
+});
 app.get("/restaurant/", (req, res) => {
   const restId = Number(req.params.restId);
   db.collection("restaurants")
