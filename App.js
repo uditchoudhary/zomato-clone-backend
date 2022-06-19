@@ -29,11 +29,40 @@ app.get("/location", (req, res) => {
     });
 });
 
-app.get("/restaurants", (req, res) => {
-  db.collection("restaurants")
+app.get("/mealType", (req, res) => {
+  db.collection("mealTypes")
     .find()
     .toArray((err, result) => {
       if (err) throw err;
+      res.send(result);
+    });
+});
+
+// app.get("/restaurants", (req, res) => {
+//   db.collection("restaurants")
+//     .find()
+//     .toArray((err, result) => {
+//       if (err) throw err;
+//       res.send(result);
+//     });
+// });
+
+app.get("/restaurants/", (req, res) => {
+  let query = {};
+  let stateId = Number(req.query.state_id);
+  let mealId = Number(req.query.meal_id);
+  console.log(stateId)
+  if (stateId) {
+    query = { state_id: stateId };
+  } else if (mealId) {
+    query = { "mealTypes.mealtype_id": mealId };
+  }
+  console.log("query", query)
+  db.collection("restaurants")
+    .find(query)
+    .toArray((err, result) => {
+      if (err) throw err;
+      console.log(result)
       res.send(result);
     });
 });
@@ -44,6 +73,18 @@ app.get("/restaurant/:restId", (req, res) => {
     .find({ restaurant_id: restId })
     .toArray((err, result) => {
       if (err) throw err;
+      console.log(result)
+      res.send(result);
+    });
+});
+
+app.get("/restaurant/", (req, res) => {
+  const restId = Number(req.params.restId);
+  db.collection("restaurants")
+    .find({ restaurant_id: restId })
+    .toArray((err, result) => {
+      if (err) throw err;
+      console.log(result);
       res.send(result);
     });
 });
